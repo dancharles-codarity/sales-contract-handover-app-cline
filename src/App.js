@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './index.css';
 
 // Zapier webhook URL - replace with actual URL when available
@@ -49,9 +49,9 @@ const App = () => {
   // Calculate values whenever form data changes
   useEffect(() => {
     calculateValues();
-  }, [formData]);
+  }, [formData, calculateValues]);
 
-  const calculateValues = () => {
+  const calculateValues = useCallback(() => {
     const isUKClient = formData.clientLocation === 'UK';
     const vatRate = isUKClient ? 0.20 : 0;
     
@@ -118,7 +118,7 @@ const App = () => {
       adSpendManagementFeeIncVAT: adSpendManagementFeeIncVAT.toFixed(2),
       paymentSchedule
     });
-  };
+  }, [formData]);
 
   const validateStep = (step) => {
     const newErrors = {};
